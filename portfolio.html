@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfólio & Briefing — Nexora</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0E2A47;
+    --bg-deep: #081B30;
+    --grid-line: rgba(234,242,250,0.07);
+    --grid-line-strong: rgba(234,242,250,0.16);
+    --paper: #EAF2FA;
+    --paper-dim: #93AFC9;
+    --accent: #FFB627;
+    --accent-dim: #C98A1B;
+    --line: #EAF2FA;
+
+    --paper-bg: #EFF2EA;
+    --paper-ink: #0E2A47;
+    --paper-ink-dim: #4E6280;
+
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--paper);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+  }
+
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  :focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:3px;
+  }
+
+  .blueprint-grid{
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(var(--grid-line-strong) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line-strong) 1px, transparent 1px);
+    background-size:16px 16px, 16px 16px, 80px 80px, 80px 80px;
+    background-position:-1px -1px;
+  }
+
+  .paper-grid{
+    background-image:
+      linear-gradient(rgba(14,42,71,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(14,42,71,0.06) 1px, transparent 1px),
+      linear-gradient(rgba(14,42,71,0.14) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(14,42,71,0.14) 1px, transparent 1px);
+    background-size:16px 16px, 16px 16px, 80px 80px, 80px 80px;
+    background-position:-1px -1px;
+  }
+
+  .mono-label{
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--accent);
+  }
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* corner registration marks — signature motif */
+  .crosshair{
+    position:absolute;
+    width:16px; height:16px;
+    pointer-events:none;
+  }
+  .crosshair::before, .crosshair::after{
+    content:"";
+    position:absolute;
+    background:currentColor;
+    opacity:0.55;
+  }
+  .crosshair::before{ width:100%; height:1px; top:50%; left:0; }
+  .crosshair::after{ width:1px; height:100%; left:50%; top:0; }
+  .crosshair.tl{ top:14px; left:14px; }
+  .crosshair.tr{ top:14px; right:14px; }
+  .crosshair.bl{ bottom:14px; left:14px; }
+  .crosshair.br{ bottom:14px; right:14px; }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky; top:0; z-index:100;
+    background:rgba(14,42,71,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--grid-line-strong);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 32px;
+    max-width:1180px; margin:0 auto;
+  }
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    font-family:var(--font-display);
+    font-weight:700; font-size:1.25rem;
+    letter-spacing:0.02em;
+  }
+  .logo-mark{
+    width:20px; height:20px;
+    border:1.5px solid var(--accent);
+    position:relative; flex-shrink:0;
+  }
+  .logo-mark::before, .logo-mark::after{
+    content:""; position:absolute; background:var(--accent);
+  }
+  .logo-mark::before{ width:100%; height:1px; top:50%; left:0; transform:translateY(-50%); }
+  .logo-mark::after{ width:1px; height:100%; left:50%; top:0; transform:translateX(-50%); }
+
+  .nav-links{
+    display:flex; align-items:center; gap:36px;
+    font-family:var(--font-mono); font-size:0.82rem;
+    text-transform:uppercase; letter-spacing:0.08em;
+    color:var(--paper-dim);
+  }
+  .nav-links a{ transition:color 0.2s; position:relative; }
+  .nav-links a:hover{ color:var(--paper); }
+  .nav-cta{
+    font-family:var(--font-mono);
+    font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em;
+    padding:10px 18px;
+    border:1px solid var(--accent);
+    color:var(--accent);
+    background:transparent;
+    transition:background 0.2s, color 0.2s;
+  }
+  .nav-cta:hover{ background:var(--accent); color:var(--bg-deep); }
+  .nav-toggle{ display:none; background:none; border:none; color:var(--paper); font-size:1.5rem; }
+
+  @media (max-width:860px){
+    .nav-links{ display:none; }
+    .nav-toggle{ display:block; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:100px 0 80px;
+  }
+  .hero-inner{
+    display:grid;
+    grid-template-columns:1.05fr 0.95fr;
+    gap:48px;
+    align-items:center;
+  }
+  .hero-eyebrow{
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:22px;
+  }
+  .hero-eyebrow::before{
+    content:""; width:26px; height:1px; background:var(--accent);
+  }
+  .hero h1{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(2.4rem, 5.4vw, 4.2rem);
+    line-height:1.05;
+    letter-spacing:-0.01em;
+    color:var(--paper);
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--accent);
+  }
+  .hero p.lede{
+    margin-top:24px;
+    font-size:1.1rem;
+    line-height:1.65;
+    color:var(--paper-dim);
+    max-width:480px;
+  }
+  .hero-actions{
+    display:flex; gap:16px; margin-top:36px; flex-wrap:wrap;
+  }
+  .btn-primary{
+    font-family:var(--font-mono);
+    font-size:0.85rem; text-transform:uppercase; letter-spacing:0.06em;
+    padding:15px 26px;
+    background:var(--accent);
+    color:var(--bg-deep);
+    border:1px solid var(--accent);
+    font-weight:500;
+    transition:transform 0.15s, box-shadow 0.15s;
+  }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 8px 24px rgba(255,182,39,0.25); }
+  .btn-secondary{
+    font-family:var(--font-mono);
+    font-size:0.85rem; text-transform:uppercase; letter-spacing:0.06em;
+    padding:15px 26px;
+    background:transparent;
+    color:var(--paper);
+    border:1px solid var(--grid-line-strong);
+    transition:border-color 0.2s, color 0.2s;
+  }
+  .btn-secondary:hover{ border-color:var(--paper); }
+
+  /* hero schematic */
+  .schematic{
+    position:relative;
+    aspect-ratio:1/1;
+    max-width:460px;
+    margin:0 auto;
+  }
+  .schematic svg{ width:100%; height:100%; overflow:visible; }
+  .draw-line{
+    stroke-dasharray:1000;
+    stroke-dashoffset:1000;
+    animation:draw 2.4s ease forwards;
+  }
+  .draw-line.d2{ animation-delay:0.3s; }
+  .draw-line.d3{ animation-delay:0.6s; }
+  .draw-line.d4{ animation-delay:0.9s; }
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+  .fade-in-label{
+    opacity:0; animation:fadeIn 0.6s ease forwards;
+  }
+  .fi1{ animation-delay:1.1s; } .fi2{ animation-delay:1.3s; } .fi3{ animation-delay:1.5s; } .fi4{ animation-delay:1.7s; }
+  @keyframes fadeIn{ to{ opacity:1; } }
+
+  @media (max-width:860px){
+    .hero-inner{ grid-template-columns:1fr; }
+    .schematic{ order:-1; max-width:340px; }
+  }
+
+  /* ---------- SECTION SHARED ---------- */
+  section{ position:relative; padding:100px 0; }
+  .section-head{
+    max-width:640px;
+    margin-bottom:56px;
+  }
+  .section-head .mono-label{ display:block; margin-bottom:16px; }
+  .section-head h2{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(1.8rem, 3.6vw, 2.6rem);
+    line-height:1.15;
+  }
+  .section-head p{
+    margin-top:16px;
+    color:var(--paper-dim);
+    font-size:1.05rem;
+    line-height:1.6;
+  }
+  .divider{
+    height:1px;
+    background:var(--grid-line-strong);
+    max-width:1180px;
+    margin:0 auto;
+  }
+
+  /* ---------- SERVICES ---------- */
+  .services-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:1px;
+    background:var(--grid-line-strong);
+    border:1px solid var(--grid-line-strong);
+  }
+  .service-card{
+    background:var(--bg);
+    padding:38px;
+    position:relative;
+    transition:background 0.25s;
+  }
+  .service-card:hover{ background:var(--bg-deep); }
+  .service-tag{
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    color:var(--accent);
+    letter-spacing:0.06em;
+  }
+  .service-card h3{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:1.3rem;
+    margin-top:14px;
+  }
+  .service-card p{
+    margin-top:10px;
+    color:var(--paper-dim);
+    font-size:0.96rem;
+    line-height:1.6;
+  }
+  @media (max-width:700px){
+    .services-grid{ grid-template-columns:1fr; }
+  }
+
+  /* ---------- PROCESS ---------- */
+  .process-bg{ background:var(--bg-deep); }
+  .process-list{
+    position:relative;
+  }
+  .process-list::before{
+    content:"";
+    position:absolute;
+    left:29px; top:12px; bottom:12px;
+    width:1px;
+    background:repeating-linear-gradient(to bottom, var(--grid-line-strong) 0, var(--grid-line-strong) 6px, transparent 6px, transparent 12px);
+  }
+  .process-item{
+    display:grid;
+    grid-template-columns:60px 1fr;
+    gap:24px;
+    padding:26px 0;
+    position:relative;
+  }
+  .process-num{
+    font-family:var(--font-mono);
+    font-size:0.85rem;
+    color:var(--accent);
+    display:flex; align-items:flex-start; gap:6px;
+  }
+  .process-num .dot{
+    width:9px; height:9px;
+    border:1px solid var(--accent);
+    background:var(--bg-deep);
+    margin-top:4px;
+    flex-shrink:0;
+  }
+  .process-item h3{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:1.2rem;
+  }
+  .process-item p{
+    margin-top:8px;
+    color:var(--paper-dim);
+    font-size:0.96rem;
+    line-height:1.6;
+    max-width:520px;
+  }
+
+  /* ---------- SPECS / STATS ---------- */
+  .specs{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    border-top:1px solid var(--grid-line-strong);
+    border-bottom:1px solid var(--grid-line-strong);
+  }
+  .spec{
+    padding:34px 28px;
+    border-left:1px solid var(--grid-line-strong);
+  }
+  .spec:first-child{ border-left:none; }
+  .spec .mono-label{ color:var(--paper-dim); margin-bottom:10px; }
+  .spec .value{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:2rem;
+    color:var(--paper);
+  }
+  .spec .value span{ color:var(--accent); }
+  @media (max-width:860px){
+    .specs{ grid-template-columns:repeat(2,1fr); }
+    .spec:nth-child(3){ border-left:none; }
+  }
+  @media (max-width:500px){
+    .specs{ grid-template-columns:1fr; }
+    .spec{ border-left:none !important; border-top:1px solid var(--grid-line-strong); }
+    .spec:first-child{ border-top:none; }
+  }
+
+  /* ---------- CTA (paper flip) ---------- */
+  .cta-paper{
+    background:var(--paper-bg);
+    color:var(--paper-ink);
+    padding:110px 0;
+  }
+  .cta-paper .mono-label{ color:var(--accent-dim); }
+  .cta-paper h2{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(2rem, 4.5vw, 3.2rem);
+    line-height:1.1;
+    max-width:680px;
+  }
+  .cta-paper p{
+    margin-top:18px;
+    color:var(--paper-ink-dim);
+    font-size:1.08rem;
+    max-width:520px;
+    line-height:1.6;
+  }
+  .cta-paper .hero-actions{ margin-top:34px; }
+  .cta-paper .btn-secondary{
+    color:var(--paper-ink);
+    border-color:rgba(14,42,71,0.25);
+  }
+  .cta-paper .btn-secondary:hover{ border-color:var(--paper-ink); }
+  .contact-info{
+    display:flex;
+    flex-wrap:wrap;
+    gap:36px;
+    margin-top:44px;
+    padding-top:28px;
+    border-top:1px solid rgba(14,42,71,0.14);
+  }
+  .contact-item{ display:flex; flex-direction:column; gap:6px; }
+  .contact-item .tb-value{
+    font-family:var(--font-mono);
+    font-size:0.92rem;
+    color:var(--paper-ink);
+    transition:color 0.2s;
+  }
+  .contact-item a.tb-value:hover{ color:var(--accent-dim); }
+
+  .stamp{
+    position:absolute; top:60px; right:48px;
+    width:96px; height:96px;
+    border:1.5px solid var(--accent-dim);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center;
+    transform:rotate(-8deg);
+    font-family:var(--font-mono);
+    font-size:0.62rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent-dim);
+    line-height:1.4;
+  }
+  @media (max-width:700px){ .stamp{ display:none; } }
+
+  /* ---------- FOOTER (title block) ---------- */
+  footer{
+    background:var(--bg-deep);
+    border-top:1px solid var(--grid-line-strong);
+    padding:56px 0 28px;
+  }
+  .titleblock{
+    display:grid;
+    grid-template-columns:1.4fr repeat(4, 1fr);
+    border:1px solid var(--grid-line-strong);
+  }
+  .tb-cell{
+    padding:18px 20px;
+    border-left:1px solid var(--grid-line-strong);
+  }
+  .tb-cell:first-child{ border-left:none; }
+  .tb-cell .mono-label{ color:var(--paper-dim); margin-bottom:8px; display:block; }
+  .tb-cell .tb-value{ font-family:var(--font-mono); font-size:0.92rem; }
+  a.tb-value:hover{ color:var(--accent); }
+  .tb-value-accent{ color:var(--accent) !important; font-weight:500; }
+  .contact-item .tb-value-accent{ color:var(--accent-dim) !important; }
+  .contact-item .tb-value-accent:hover{ color:var(--accent) !important; }
+  .tb-brand{
+    font-family:var(--font-display);
+    font-weight:700; font-size:1.3rem;
+    margin-bottom:6px;
+  }
+  .tb-brand-sub{ color:var(--paper-dim); font-size:0.85rem; }
+  .footer-links{
+    display:flex; gap:24px; margin-top:6px;
+  }
+  .footer-links a{
+    font-family:var(--font-mono); font-size:0.8rem;
+    color:var(--paper-dim); transition:color 0.2s;
+  }
+  .footer-links a:hover{ color:var(--accent); }
+  .copyright{
+    margin-top:28px;
+    text-align:center;
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    color:var(--paper-dim);
+    opacity:0.6;
+  }
+  @media (max-width:860px){
+    .titleblock{ grid-template-columns:1fr 1fr; }
+    .tb-cell:nth-child(3){ border-left:none; }
+  }
+  @media (max-width:560px){
+    .titleblock{ grid-template-columns:1fr; }
+    .tb-cell{ border-left:none !important; border-top:1px solid var(--grid-line-strong); }
+    .tb-cell:first-child{ border-top:none; }
+  }
+
+  /* ---------- PORTFOLIO PAGE ---------- */
+  .page-hero{
+    padding:80px 0 60px;
+    position:relative;
+  }
+  .page-hero .mono-label{ display:block; margin-bottom:16px; }
+  .page-hero h1{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(2rem, 4.6vw, 3.4rem);
+    line-height:1.1;
+    max-width:720px;
+  }
+  .page-hero p{
+    margin-top:18px;
+    color:var(--paper-dim);
+    font-size:1.08rem;
+    max-width:560px;
+    line-height:1.6;
+  }
+  .breadcrumb{
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    color:var(--paper-dim);
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    margin-bottom:22px;
+  }
+  .breadcrumb a{ color:var(--accent); }
+  .breadcrumb a:hover{ text-decoration:underline; }
+
+  .portfolio-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1px;
+    background:var(--grid-line-strong);
+    border:1px solid var(--grid-line-strong);
+  }
+  .project-card{
+    background:var(--bg);
+    padding:0;
+    position:relative;
+    overflow:hidden;
+    transition:background 0.25s;
+  }
+  .project-card:hover{ background:var(--bg-deep); }
+  .project-thumb{
+    aspect-ratio:4/3;
+    position:relative;
+    border-bottom:1px solid var(--grid-line-strong);
+    overflow:hidden;
+  }
+  .project-thumb svg{ width:100%; height:100%; }
+  .project-body{ padding:26px; }
+  .project-tag{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    color:var(--accent);
+    letter-spacing:0.06em;
+  }
+  .project-card h3{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:1.15rem;
+    margin-top:10px;
+  }
+  .project-card p{
+    margin-top:8px;
+    color:var(--paper-dim);
+    font-size:0.9rem;
+    line-height:1.55;
+  }
+  .project-meta{
+    margin-top:14px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .project-meta span{
+    font-family:var(--font-mono);
+    font-size:0.68rem;
+    color:var(--paper-dim);
+    border:1px solid var(--grid-line-strong);
+    padding:3px 8px;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+  }
+  @media (max-width:900px){ .portfolio-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:600px){ .portfolio-grid{ grid-template-columns:1fr; } }
+
+  /* briefing form */
+  .briefing{
+    background:var(--paper-bg);
+    color:var(--paper-ink);
+    padding:100px 0;
+    position:relative;
+  }
+  .briefing-grid{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:56px;
+  }
+  .briefing-intro .mono-label{ color:var(--accent-dim); display:block; margin-bottom:16px; }
+  .briefing-intro h2{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(1.8rem, 3.6vw, 2.6rem);
+    line-height:1.15;
+  }
+  .briefing-intro p{
+    margin-top:16px;
+    color:var(--paper-ink-dim);
+    font-size:1.02rem;
+    line-height:1.65;
+  }
+  .briefing-intro .contact-item{ margin-top:28px; }
+  .briefing-intro .tb-value{ font-family:var(--font-mono); font-size:0.92rem; }
+
+  form.briefing-form{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+  }
+  .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .field{ display:flex; flex-direction:column; gap:8px; }
+  .field label{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--accent-dim);
+  }
+  .field input, .field select, .field textarea{
+    font-family:var(--font-body);
+    font-size:0.98rem;
+    padding:13px 14px;
+    background:#fff;
+    border:1px solid rgba(14,42,71,0.2);
+    color:var(--paper-ink);
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{
+    outline:2px solid var(--accent);
+    outline-offset:1px;
+    border-color:var(--accent);
+  }
+  .field textarea{ resize:vertical; min-height:120px; font-family:var(--font-body); }
+  .form-submit{
+    font-family:var(--font-mono);
+    font-size:0.85rem;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    padding:16px 26px;
+    background:var(--paper-ink);
+    color:var(--paper-bg);
+    border:1px solid var(--paper-ink);
+    font-weight:500;
+    transition:transform 0.15s, opacity 0.15s;
+    align-self:flex-start;
+  }
+  .form-submit:hover{ transform:translateY(-2px); opacity:0.9; }
+  .form-note{
+    font-family:var(--font-mono);
+    font-size:0.76rem;
+    color:var(--paper-ink-dim);
+  }
+  @media (max-width:760px){
+    .briefing-grid{ grid-template-columns:1fr; }
+    .form-row{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body class="blueprint-grid">
+
+  <header>
+    <nav class="nav">
+      <a href="nexora.html" class="logo">
+        <span class="logo-mark"></span>
+        NEXORA
+      </a>
+      <div class="nav-links">
+        <a href="nexora.html">Início</a>
+        <a href="#trabalhos">Trabalhos</a>
+        <a href="#briefing" class="nav-cta">Enviar briefing</a>
+      </div>
+      <button class="nav-toggle" aria-label="Abrir menu">☰</button>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="crosshair tl" style="color:var(--paper-dim)"></div>
+    <div class="crosshair tr" style="color:var(--paper-dim)"></div>
+    <div class="wrap">
+      <div class="breadcrumb"><a href="nexora.html">Início</a> / Portfólio</div>
+      <span class="mono-label">[ Portfólio ]</span>
+      <h1 style="margin-top:16px;">Modelos do que construímos por aqui.</h1>
+      <p>A Nexora está começando agora — por isso, em vez de estudos de caso, mostramos os tipos de projeto que sabemos construir bem. Escolha o que mais se parece com o seu e conte pra gente no formulário abaixo.</p>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO GRID -->
+  <section id="trabalhos" style="padding-top:20px;">
+    <div class="wrap">
+      <div class="portfolio-grid">
+
+        <div class="project-card">
+          <div class="project-thumb">
+            <svg viewBox="0 0 300 225" fill="none">
+              <rect width="300" height="225" fill="var(--bg-deep)"/>
+              <rect x="20" y="20" width="260" height="24" fill="none" stroke="var(--line)" stroke-width="1"/>
+              <rect x="20" y="56" width="260" height="80" fill="none" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="4 3"/>
+              <rect x="20" y="148" width="80" height="56" fill="none" stroke="var(--line)" stroke-width="1"/>
+              <rect x="110" y="148" width="80" height="56" fill="none" stroke="var(--line)" stroke-width="1"/>
+              <rect x="200" y="148" width="80" height="56" fill="none" stroke="var(--line)" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="project-body">
+            <span class="project-tag">[ MODELO ]</span>
+            <h3>Landing page para SaaS</h3>
+            <p>Página de captação com hero direto ao ponto, prova social e um único CTA claro.</p>
+            <div class="project-meta"><span>Web</span><span>Conversão</span></div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-thumb">
+            <svg viewBox="0 0 300 225" fill="none">
+              <rect width="300" height="225" fill="var(--bg-deep)"/>
+              <rect x="20" y="20" width="60" height="185" fill="none" stroke="var(--line)" stroke-width="1"/>
+              <rect x="96" y="20" width="184" height="40" fill="none" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="4 3"/>
+              <rect x="96" y="72" width="86" height="66" fill="none" stroke="var(--line)" stroke-width="1"/>
+              <rect x="194" y="72" width="86" height="66" fill="none" stroke="var(--line)" stroke-width="1"/>
+              <rect x="96" y="150" width="184" height="55" fill="none" stroke="var(--line)" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="project-body">
+            <span class="project-tag">[ MODELO ]</span>
+            <h3>Dashboard interno</h3>
+            <p>Painel de controle com navegação lateral, cartões de métricas e tabelas de dados.</p>
+            <div class="project-meta"><span>App</span><span>Dados</span></div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-thumb">
+            <svg viewBox="0 0 300 225" fill="none">
+              <rect width="300" height="225" fill="var(--bg-deep)"/>
+              <rect x="20" y="20" width="260" height="24" fill="none" stroke="var(--line)" stroke-width="1"/>
+              <rect x="20" y="56" width="80" height="90" fill="none" stroke="var(--line)" stroke-width="1"/>
+              <rect x="110" y="56" width="80" height="90" fill="none" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="4 3"/>
+              <rect x="200" y="56" width="80" height="90" fill="none" stroke="var(--line)" stroke-width="1"/>
+              <rect x="20" y="158" width="260" height="46" fill="none" stroke="var(--line)" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="project-body">
+            <span class="project-tag">[ MODELO ]</span>
+            <h3>Loja virtual</h3>
+            <p>Catálogo de produtos, filtros e checkout simplificado para vender direto pelo site.</p>
+            <div class="project-meta"><span>E-commerce</span><span>Vendas</span></div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-thumb">
+            <svg viewBox="0 0 300 225" fill="none">
+              <rect width="300" height="225" fill="var(--bg-deep)"/>
+              <rect x="20" y="20" width="260" height="60" fill="none" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="4 3"/>
+              <rect x="20" y="94" width="120" height="110" fill="none" stroke="var(--line)" stroke-width="1"/>
+              <rect x="152" y="94" width="128" height="52" fill="none" stroke="var(--line)" stroke-width="1"/>
+              <rect x="152" y="152" width="128" height="52" fill="none" stroke="var(--line)" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="project-body">
+            <span class="project-tag">[ MODELO ]</span>
+            <h3>Site institucional</h3>
+            <p>Apresentação da empresa, serviços e contato — pensado pra transmitir confiança rápido.</p>
+            <div class="project-meta"><span>Web</span><span>Institucional</span></div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-thumb">
+            <svg viewBox="0 0 300 225" fill="none">
+              <rect width="300" height="225" fill="var(--bg-deep)"/>
+              <rect x="20" y="20" width="260" height="24" fill="none" stroke="var(--line)" stroke-width="1"/>
+              <circle cx="150" cy="112" r="46" fill="none" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="4 3"/>
+              <rect x="20" y="168" width="120" height="36" fill="none" stroke="var(--line)" stroke-width="1"/>
+              <rect x="160" y="168" width="120" height="36" fill="none" stroke="var(--line)" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="project-body">
+            <span class="project-tag">[ MODELO ]</span>
+            <h3>App de agendamento</h3>
+            <p>Marcação de horários com calendário, confirmação automática e lembretes.</p>
+            <div class="project-meta"><span>App</span><span>Serviços</span></div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-thumb">
+            <svg viewBox="0 0 300 225" fill="none">
+              <rect width="300" height="225" fill="var(--bg-deep)"/>
+              <rect x="20" y="20" width="260" height="24" fill="none" stroke="var(--line)" stroke-width="1"/>
+              <rect x="20" y="56" width="166" height="148" fill="none" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="4 3"/>
+              <rect x="200" y="56" width="80" height="68" fill="none" stroke="var(--line)" stroke-width="1"/>
+              <rect x="200" y="136" width="80" height="68" fill="none" stroke="var(--line)" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="project-body">
+            <span class="project-tag">[ MODELO ]</span>
+            <h3>Blog & portal de conteúdo</h3>
+            <p>Publicação de artigos com boa leitura, categorias e otimização para busca.</p>
+            <div class="project-meta"><span>Web</span><span>SEO</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" style="margin-top:20px;"></div>
+
+  <!-- BRIEFING -->
+  <section id="briefing" class="briefing paper-grid">
+    <div class="crosshair tl" style="color:var(--paper-ink-dim)"></div>
+    <div class="crosshair br" style="color:var(--paper-ink-dim)"></div>
+    <div class="wrap briefing-grid">
+      <div class="briefing-intro">
+        <span class="mono-label">[ Briefing ]</span>
+        <h2>Qual desses é o seu projeto?</h2>
+        <p>Escolha o modelo mais parecido com o que você precisa, preencha o formulário e a gente monta uma proposta sob medida. Sem compromisso.</p>
+
+        <div class="contact-item">
+          <span class="mono-label" style="color:var(--accent-dim);">Prefere falar direto?</span>
+          <a href="https://wa.me/5535998137022" class="tb-value" style="display:block; color:var(--paper-ink);">WhatsApp — (35) 99813-7022</a>
+          <a href="mailto:NexoraCDD@proton.me" class="tb-value tb-value-accent" style="display:block; margin-top:6px;">NexoraCDD@proton.me</a>
+        </div>
+      </div>
+
+      <form class="briefing-form" id="briefingForm">
+        <!-- Cole sua Access Key do web3forms.com aqui embaixo -->
+        <input type="hidden" name="access_key" value="99f2f4a2-6f78-4900-a56f-5299355bd9d7">
+        <input type="hidden" name="subject" value="Novo briefing de projeto — Nexora">
+        <input type="checkbox" name="botcheck" style="display:none;">
+
+        <div class="form-row">
+          <div class="field">
+            <label for="bf-name">Nome</label>
+            <input id="bf-name" name="Nome" type="text" placeholder="Seu nome" required>
+          </div>
+          <div class="field">
+            <label for="bf-contact">E-mail ou WhatsApp</label>
+            <input id="bf-contact" name="Contato" type="text" placeholder="Como te respondemos?" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="bf-type">Tipo de projeto</label>
+          <select id="bf-type" name="Tipo de projeto">
+            <option>Landing page para SaaS</option>
+            <option>Dashboard interno</option>
+            <option>Loja virtual</option>
+            <option>Site institucional</option>
+            <option>App de agendamento</option>
+            <option>Blog / portal de conteúdo</option>
+            <option>Outro</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="bf-message">O que você quer que a gente construa?</label>
+          <textarea id="bf-message" name="Descrição do projeto" placeholder="Conte o objetivo do projeto, referências e prazo, se tiver." required></textarea>
+        </div>
+
+        <button type="submit" class="form-submit" id="bf-submit">Enviar briefing</button>
+        <span class="form-note" id="bf-note">Ao enviar, sua mensagem chega direto na nossa caixa de entrada — sem abrir nenhum app.</span>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    const briefingForm = document.getElementById('briefingForm');
+    const submitBtn = document.getElementById('bf-submit');
+    const note = document.getElementById('bf-note');
+
+    briefingForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      submitBtn.textContent = 'Enviando...';
+      submitBtn.disabled = true;
+
+      const formData = new FormData(briefingForm);
+      const payload = Object.fromEntries(formData.entries());
+
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload)
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            briefingForm.reset();
+            submitBtn.textContent = 'Enviado ✓';
+            note.textContent = 'Recebemos seu briefing! Vamos responder em breve.';
+            note.style.color = 'var(--accent-dim)';
+          } else {
+            throw new Error(data.message || 'Falha no envio');
+          }
+        })
+        .catch(() => {
+          submitBtn.textContent = 'Enviar briefing';
+          submitBtn.disabled = false;
+          note.textContent = 'Não conseguimos enviar agora. Chama no WhatsApp ou tente novamente.';
+          note.style.color = '#B3261E';
+        });
+    });
+  </script>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div class="titleblock">
+        <div class="tb-cell">
+          <div class="tb-brand">NEXORA</div>
+          <div class="tb-brand-sub">Building the future of the web.</div>
+          <div class="footer-links">
+            <a href="nexora.html">Início</a>
+            <a href="#trabalhos">Trabalhos</a>
+            <a href="#briefing">Briefing</a>
+          </div>
+        </div>
+        <div class="tb-cell">
+          <span class="mono-label">Telefone</span>
+          <a href="tel:+5535998137022" class="tb-value" style="display:block;">(35) 99813-7022</a>
+        </div>
+        <div class="tb-cell">
+          <span class="mono-label">E-mail — melhor opção</span>
+          <a href="mailto:NexoraCDD@proton.me" class="tb-value tb-value-accent" style="display:block; word-break:break-all;">NexoraCDD@proton.me</a>
+        </div>
+        <div class="tb-cell">
+          <span class="mono-label">Folha</span>
+          <div class="tb-value">02 / 02</div>
+        </div>
+        <div class="tb-cell">
+          <span class="mono-label">Rev.</span>
+          <div class="tb-value">2026</div>
+        </div>
+      </div>
+      <div class="copyright">© 2026 Nexora. Todos os direitos reservados.</div>
+    </div>
+  </footer>
+
+</body>
+</html>
