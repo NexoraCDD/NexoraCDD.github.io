@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://nexoracdd.github.io/sitemap.xml
